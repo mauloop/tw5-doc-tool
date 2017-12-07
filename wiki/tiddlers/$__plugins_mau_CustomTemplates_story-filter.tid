@@ -1,0 +1,9 @@
+created: 20171025105323602
+modified: 20171204103121236
+tags: CustomTemplatesPlugin $:/tags/Macro
+title: $:/plugins/mau/CustomTemplates/story-filter
+type: text/vnd.tiddlywiki
+
+\define story-filter()
+[list[$:/StoryList]] [list[$:/StoryList]allbefore{$:/HistoryList!!current-tiddler}] [list[$:/StoryList]allafter{$:/HistoryList!!current-tiddler}] +[first[]]
+\end

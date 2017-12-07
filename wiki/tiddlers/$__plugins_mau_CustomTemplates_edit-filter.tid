@@ -1,0 +1,7 @@
+created: 20171104215855864
+modified: 20171204103121245
+tags: CustomTemplatesPlugin $:/tags/Macro
+title: $:/plugins/mau/CustomTemplates/edit-filter
+type: text/vnd.tiddlywiki
+
+\define edit-filter(template) """[all[shadows+tiddlers]tag[$:/tags/EditTemplate]] [all[shadows+tiddlers]tag[$:/tags/edit/$template$]] -[list[$:/tags/edit/$template$!!template-exclude]] -[has[draft.of]] +[sortby{$:/tags/edit/$template$!!list}]"""

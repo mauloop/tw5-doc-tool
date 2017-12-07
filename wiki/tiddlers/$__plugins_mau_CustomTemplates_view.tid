@@ -1,0 +1,31 @@
+created: 20171102115242759
+creator: Maurizio Boero
+modified: 20171204103121226
+modifier: Maurizio Boero
+tags: CustomTemplatesPlugin
+title: $:/plugins/mau/CustomTemplates/view
+type: text/vnd.tiddlywiki
+
+\define frame-classes()
+tc-tiddler-frame tc-tiddler-view-frame $(missingTiddlerClass)$ $(shadowTiddlerClass)$ $(systemTiddlerClass)$ $(tiddlerTagClasses)$
+
+\end
+\define folded-state()
+$:/state/folded/$(currentTiddler)$
+\end
+
+<$set name="storyTiddler" value=<<currentTiddler>>><$set name="tiddlerInfoState" value=<<qualify "$:/state/popup/tiddler-info">>><$tiddler tiddler=<<currentTiddler>>><div class=<<frame-classes>>>
+
+<$wikify name="vf" text=<<view-filter {{!!template}}>> >
+
+<$list filter=<<vf>> variable="listItem">
+<$transclude tiddler=<<listItem>>/>
+</$list>
+
+</$wikify>
+
+</div>
+</$tiddler>
+</$set>
+</$set>
+

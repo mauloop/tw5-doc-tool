@@ -1,0 +1,40 @@
+created: 20171102115329519
+creator: Maurizio Boero
+modified: 20171204103121254
+modifier: Maurizio Boero
+tags: CustomTemplatesPlugin
+title: $:/plugins/mau/CustomTemplates/edit
+type: text/vnd.tiddlywiki
+
+\define actions()
+<$action-sendmessage $message="tm-add-tag" $param={{$:/temp/NewTagName}}/>
+<$action-deletetiddler $tiddler="$:/temp/NewTagName"/>
+<$action-sendmessage $message="tm-add-field" $name={{$:/temp/newfieldname}} $value={{$:/temp/newfieldvalue}}/>
+<$action-deletetiddler $tiddler="$:/temp/newfieldname"/>
+<$action-deletetiddler $tiddler="$:/temp/newfieldvalue"/>
+<$action-sendmessage $message="tm-save-tiddler"/>
+\end
+
+\define frame-classes()
+tc-tiddler-frame tc-tiddler-edit-frame $(missingTiddlerClass)$ $(shadowTiddlerClass)$ $(systemTiddlerClass)$
+\end
+
+<div class=<<frame-classes>>>
+<$fieldmangler>
+<$set name="storyTiddler" value=<<currentTiddler>>>
+<$keyboard key="((cancel-edit-tiddler))" message="tm-cancel-tiddler">
+<$keyboard key="((save-tiddler))" actions=<<actions>>>
+
+<$wikify name="ef" text=<<edit-filter {{!!template}}>> >
+
+<$list filter=<<ef>> variable="listItem">
+<$transclude tiddler=<<listItem>>/>
+</$list>
+
+</$wikify>
+
+</$keyboard>
+</$keyboard>
+</$set>
+</$fieldmangler>
+</div>

@@ -1,0 +1,39 @@
+created: 20171025234922404
+creator: Maurizio Boero
+modified: 20171204103121263
+modifier: Maurizio Boero
+tags: CustomTemplatesPlugin $:/tags/PageTemplate
+title: $:/core/ui/PageTemplate/story
+type: text/vnd.tiddlywiki
+
+<section class="tc-story-river">
+
+<section class="story-backdrop">
+
+<$list filter="[all[shadows+tiddlers]tag[$:/tags/AboveStory]!has[draft.of]]">
+
+<$transclude/>
+
+</$list>
+
+</section>
+
+<$list filter=<<story-filter>> emptyMessage={{$:/config/EmptyStoryMessage}}>
+<$set name="vt" filter="""[all[current]get[template]]""" value="$:/plugins/mau/CustomTemplates/view" emptyValue="$:/core/ui/ViewTemplate">
+<$set name="et" filter="""[all[current]get[template]]""" value="$:/plugins/mau/CustomTemplates/edit" emptyValue="$:/core/ui/EditTemplate">
+
+<$list filter="""[all[current]]""" history="$:/HistoryList" template=<<vt>> editTemplate=<<et>> storyview={{$:/view}} />
+
+</$set>
+</$set>
+</$list>
+
+<section class="story-frontdrop">
+
+<$list filter="[all[shadows+tiddlers]tag[$:/tags/BelowStory]!has[draft.of]]">
+
+<$transclude/>
+
+</$list>
+
+</section>

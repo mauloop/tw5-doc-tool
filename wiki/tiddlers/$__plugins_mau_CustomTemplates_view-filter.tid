@@ -1,0 +1,7 @@
+created: 20171104215344283
+modified: 20171204103121214
+tags: CustomTemplatesPlugin $:/tags/Macro
+title: $:/plugins/mau/CustomTemplates/view-filter
+type: text/vnd.tiddlywiki
+
+\define view-filter(template) """[all[shadows+tiddlers]tag[$:/tags/ViewTemplate]] [all[shadows+tiddlers]tag[$:/tags/view/$template$]] -[list[$:/tags/view/$template$!!template-exclude]] -[has[draft.of]] +[sortby{$:/tags/view/$template$!!list}]"""
