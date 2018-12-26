@@ -1,0 +1,11 @@
+created: 20171117133140760
+modified: 20180714074811745
+tags: $:/tags/Macro
+title: $:/.mau/last-modified
+tmap.id: a2b8fc66-776d-4f55-8b2d-bf281b311906
+type: text/vnd.tiddlywiki
+
+\define last-modified() <$view tiddler={{{[!is[system]!has[draft.of]!sort[modified]first[]]}}} field="modified" format="date" template="DDth mmm YYYY, ddd, 0hh:0mm" />
+
+|Usage|Output|h
+|`<<last-modified>>`|<<last-modified>>|

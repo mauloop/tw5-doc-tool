@@ -1,5 +1,5 @@
 created: 20171204174122793
-modified: 20171207155937222
+modified: 20181224080746888
 tags: $:/tags/Macro DocToolPlugin
 title: $:/plugins/mau/DocTool/macros/dct-toc
 tmap.id: 90e1c8fb-5069-4800-9497-87c9c2371c51
@@ -33,9 +33,6 @@ ti: topic index (x.y. ... .i)
 </$list>
 
 </$set>
-</$set>
-</$set>
-</$set>
 \end
 
 \define dct-toc-state() $:/state/toc/$(currentTiddler)$
@@ -56,7 +53,10 @@ ti: topic index (x.y. ... .i)
 \define dct-toc-drop-actions(p)
 <$set name="action-index" value={{{[<actionTiddler>get[$(dctid)$index]]}}}>
 <$set name="dct-toc-drop" filter="""[all[current]get[$(dctid)$index]] +[removeprefix<action-index>]""" value="do-not-drop"  emptyValue="ok-to-drop">
-<$action-setfield $tiddler="$:/SiteSubtitle" text=<<currentTiddler>> />
+<!-- $action-setfield $tiddler="Debug" ct=<<currentTiddler>> />
+<$action-setfield $tiddler="Debug" at=<<actionTiddler>> />
+<$action-setfield $tiddler="Debug" ci={{{[all[current]get[$(dctid)$index]]}}} />
+<$action-setfield $tiddler="Debug" ai=<<action-index>> / -->
 <$macrocall $name=<<dct-toc-drop>> p="""$p$"""/>
 </$set>
 </$set>
@@ -73,7 +73,7 @@ ti: topic index (x.y. ... .i)
 </$set>
 <<dct-toc-recurse>>
 </$list>
-<$tiddler tiddler="">
+<$tiddler tiddler="""$root$""">
 <li><$droppable actions=<<dct-toc-drop-actions """$root$""">> >
 <div class="tc-droppable-placeholder">&nbsp;</div>
 @@color:transparent;=====@@

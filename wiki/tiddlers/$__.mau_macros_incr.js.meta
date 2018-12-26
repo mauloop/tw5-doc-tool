@@ -1,8 +1,7 @@
 created: 20170702190511339
 creator: )+(auloop
-modified: 20171207155521282
+modified: 20180116205954318
 modifier: )+(auloop
 module-type: macro
-tags: DocToolPlugin $:/tags/Macro
-title: $:/plugins/mau/DocTool/macros/incr.js
+title: $:/.mau/macros/incr.js
 type: application/javascript
