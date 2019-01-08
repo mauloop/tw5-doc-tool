@@ -1,0 +1,111 @@
+author: Maurizio Boero
+core-version: >=5.1.17
+created: 20190108145021447
+description: DocToolPlugin
+modified: 20190108151052842
+plugin-type: plugin
+title: $:/plugins/mau/DocTool
+type: application/json
+version: 0.1.1
+
+{
+    "tiddlers": {
+        "$:/plugins/mau/DocTool/config/doc-css": {
+            "text": ".noBorder,.noBorder td,.noBorder th,.noBorder tr {border:0}\n\n.topic-path {\n    max-width: 90vw;\n    display: block;\n    overflow: auto;\n}\n\n/* Two columns story layout\n.tc-story-river {   display: flex;   flex-wrap: wrap; }\n.tc-tiddler-frame { max-width: 49%; margin-right: 1%; }\n.tc-tiddler-body { max-height: 12em; overflow: auto; }\n*/\n\n/* Two columns below-story layout */\n.below-story {   display: flex;   flex-wrap: wrap; }\n.below-story .tc-tiddler-frame { height: 18em; max-width: 49%; margin-right: 1%; }\n.below-story .tc-tiddler-title { height: 8em; }\n.below-story .tc-tiddler-body { height: 6em; overflow: auto; }",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/css",
+            "title": "$:/plugins/mau/DocTool/config/doc-css",
+            "tags": "$:/tags/Stylesheet DocToolPlugin",
+            "modified": "20181226180119872",
+            "created": "20181226175427303"
+        },
+        "$:/plugins/mau/DocTool/config/doc-id": {
+            "text": "sample-",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/plain",
+            "title": "$:/plugins/mau/DocTool/config/doc-id",
+            "tags": "DocToolPlugin",
+            "modified": "20181226180414515",
+            "created": "20181226170948536"
+        },
+        "$:/plugins/mau/DocTool/exporters/json4docx": {
+            "text": "\\define renderContent()\n<!-- $text text=<<jsontiddlers filter:\"\"\"$(exportFilter)$\"\"\">>/ -->\n{{{ $(exportFilter)$ +[limit[1]] ||$:/plugins/mau/DocTool/templates/json4docx}}}\n\\end\n<$importvariables filter=\"[[$:/core/ui/PageMacros]] [all[shadows+tiddlers]tag[$:/tags/Macro]!has[draft.of]]\"><<renderContent>></$importvariables>\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "title": "$:/plugins/mau/DocTool/exporters/json4docx",
+            "tags": "$:/tags/Exporter DocToolPlugin",
+            "modified": "20190108142431853",
+            "extension": ".json",
+            "description": "JSON for DOCX",
+            "created": "20190107194802565"
+        },
+        "$:/plugins/mau/DocTool/macros/doctool-toc": {
+            "text": "\\define ok-to-write-index(t,ti) <$action-setfield $tiddler=\"\"\"$t$\"\"\" $field=\"\"\"$(doc-id)$index\"\"\" $value=\"$ti$\" />\n\n\\define set-ti(pi,i) $pi$.$i$\n\n\\define doc-rebuild-index(t,i,p,pi)\n<!--\nt: current topic\ni: incremental interger to append to pi to obtain current topic index (ti)\np: parent topic\npi: parent topic index (x.y. ...)\nti: topic index (x.y. ... .i)\n-->\n\n<$set name=\"ti\" filter=\"\"\"[enlist[$pi$]]\"\"\" value=<<set-ti \"\"\"$pi$\"\"\" \"\"\"$i$\"\"\">> emptyValue=\"\"\"$i$\"\"\">\n\n<$set name=\"write-index\" filter=\"\"\"[<ti>] -[[$t$]get[$(doc-id)$index]]\"\"\" value=\"ok-to-write-index\" emptyValue=\"do-not-write-index\">\n<$macrocall $name=<<write-index>> t=\"\"\"$t$\"\"\" ti=<<ti>> />\n</$set>\n\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]\"\"\" variable=\"list-item\">\n<$macrocall $name=\"doc-rebuild-index\" t=<<list-item>> i=<<incr \"\"\"$i$\"\"\">> p=\"\"\"$p$\"\"\" pi=\"\"\"$pi$\"\"\"/>\n</$list>\n\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$t$]sortby{$t$!!$(doc-id)$list}first[]]\"\"\" variable=\"list-item\">\n<$macrocall $name=\"doc-rebuild-index\" t=<<list-item>> i=\"1\" p=\"\"\"$t$\"\"\" pi=<<ti>>/>\n</$list>\n\n</$set>\n\\end\n\n\\define doc-toc-state() $:/state/toc/$(currentTiddler)$\n\n\\define caret() <$set name=\"c\" filter=\"\"\"[{$(doc-toc-state)$}] -[[show]]\"\"\" value=\"caret-right\" emptyValue=\"caret-down\"><$macrocall $name=<<c>>/></$set>\n\n\\define caret-right() <$button set=<<doc-toc-state>> setTo=\"show\" class=\"tc-btn-invisible tc-tiddlylink\"><i class=\"fa fa-1x fa-caret-right\"/></$button>\n\n\\define caret-down() <$button class=\"tc-btn-invisible tc-tiddlylink\"><i class=\"fa fa-1x fa-caret-down\"/><$action-deletetiddler $tiddler=<<doc-toc-state>> /></$button>\n\n\\define doc-toc-recurse() <$set name=\"r\" filter=\"\"\"[{$(doc-toc-state)$}] -[[show]]\"\"\" value=\"\" emptyValue=\"doc-toc\"><$macrocall $name=<<r>> root=<<currentTiddler>>/></$set>\n\n\\define ok-to-drop(p)\n<$action-listops $tiddler=\"\"\"$p$\"\"\" $field=\"$(doc-id)$list\" $filter=\"\"\"[$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]\"\"\"/>\n<$action-setfield $tiddler=<<actionTiddler>> $(doc-id)$parent=\"\"\"$p$\"\"\"/>\n\\end\n\n\\define doc-toc-drop-actions(p)\n<$set name=\"action-index\" value={{{[<actionTiddler>get[$(doc-id)$index]]}}}>\n<$set name=\"doc-toc-drop\" filter=\"\"\"[all[current]get[$(doc-id)$index]] +[removeprefix<action-index>]\"\"\" value=\"do-not-drop\"  emptyValue=\"ok-to-drop\">\n<!-- $action-setfield $tiddler=\"Debug\" ct=<<currentTiddler>> />\n<$action-setfield $tiddler=\"Debug\" at=<<actionTiddler>> />\n<$action-setfield $tiddler=\"Debug\" ci={{{[all[current]get[$(doc-id)$index]]}}} />\n<$action-setfield $tiddler=\"Debug\" ai=<<action-index>> / -->\n<$macrocall $name=<<doc-toc-drop>> p=\"\"\"$p$\"\"\"/>\n</$set>\n</$set>\n\\end\n\n\\define doc-toc(root)\n<ul class=\"fa-ul\">\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$root$]sortby{$root$!!$(doc-id)$list}]\"\"\">\n<$set name=\"i\" value={{!!$(doc-id)$index}}>\n<li><$droppable actions=<<doc-toc-drop-actions \"\"\"$root$\"\"\">> >\n<div class=\"tc-droppable-placeholder\">&nbsp;</div>\n<<caret>> <$link to={{!!title}}><$view field=\"$(doc-id)$index\"/> <$view field=\"caption\">{{!!title}}</$view></$link>\n</$droppable></li>\n</$set>\n<<doc-toc-recurse>>\n</$list>\n<$tiddler tiddler=\"\"\"$root$\"\"\">\n<li><$droppable actions=<<doc-toc-drop-actions \"\"\"$root$\"\"\">> >\n<div class=\"tc-droppable-placeholder\">&nbsp;</div>\n@@color:transparent;=====@@\n</$droppable></li>\n</$tiddler>\n</ul>\n\\end\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "tmap.id": "90e1c8fb-5069-4800-9497-87c9c2371c51",
+            "title": "$:/plugins/mau/DocTool/macros/doctool-toc",
+            "tags": "$:/tags/Macro DocToolPlugin",
+            "modified": "20181226173500643",
+            "created": "20171204174122793"
+        },
+        "$:/plugins/mau/DocTool/macros/topic-path": {
+            "text": "\\define topic-path(here, parent:\"\", path:\"\")\n<$set name=\"parent\" value={{{[[$here$]get[$(doc-id)$parent]]}}}>\n<$set name=\"next\" filter=\"\"\"[[$here$]get[$(doc-id)$parent]]\"\"\" value=\"add-path\" emptyValue=\"print-path\">\n<$macrocall $name=<<next>> here=\"\"\"$here$\"\"\" parent=<<parent>> path=\"\"\"$path$\"\"\" />\n</$set>\n</$set>\n\\end\n\n\\define add-path(here, parent, path)\n<$macrocall $name=\"title-path\" here=\"\"\"$parent$\"\"\" parent=\"\" path=\"\"\"[[$here$]] $path$\"\"\"/>\n\\end\n\n\\define print-path(here, parent, path)\n<table class=\"topic-path noBorder\"><tr>\n<$list filter=\"\"\"[[$here$]] $path$\"\"\">\n<$set name=\"caret\" filter=\"\"\"[enlist[$here$]]\"\"\" value=\"\"\"<i class=\"fa fa-1x fa-caret-right\"/>\"\"\" emptyValue=\"\">\n<td style=\"white-space:nowrap;word-break:keep-all;\"><$link><<currentTiddler>> <<caret>></$link></td>\n</$set>\n</$list>\n</tr></table>\n\\end\n\n<!--\n\\define printPath(here, parent, path)\n<$list filter=\"\"\"[[$here$]] $path$\"\"\">\n<$macrocall $name=\"displayPathPills\" item=<<currentTiddler>> />\n</$list>\n\\end\n\n\\define displayPathPills(item)\n<$macrocall $name=\"tag-pill\" tag=\"\"\"$item$\"\"\" element-tag=\"$button\" actions=<<pathActions>> />\n\\end\n\n\\define pathActions(item)\n{{$:/core/images/right-arrow}}<$action-navigate/>\n\\end\n-->",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "tmap.id": "e5425381-02ec-4ba3-af64-df2347c51029",
+            "title": "$:/plugins/mau/DocTool/macros/topic-path",
+            "tags": "DocToolPlugin $:/tags/Macro",
+            "modified": "20181226180214854",
+            "created": "20170719131238686"
+        },
+        "$:/plugins/mau/DocTool/templates/json4docx": {
+            "text": "<!--\n\nThis template is used for saving tiddlers in JSON format to feed DOCX-templates\n\n--><$view field=\"text\" format=\"plainwikified\" />\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "title": "$:/plugins/mau/DocTool/templates/json4docx",
+            "tags": "DocToolPlugin",
+            "modified": "20190107212735669",
+            "created": "20190107201120571"
+        },
+        "$:/plugins/mau/DocTool/ui/below-story": {
+            "text": "\\define sort-by-parent() \"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]\"\"\"\n\n<div class=\"below-story\">\n<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"parent\" filter=<<story-filter>> >\n<$wikify name=\"parent-list\" text=<<sort-by-parent>> >\n<$list filter=<<parent-list>> template=\"$:/plugins/mau/DocTool/ui/below-story/view-template\" />\n</$wikify>\n</$set>\n</$set>\n</div>",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "title": "$:/plugins/mau/DocTool/ui/below-story",
+            "tags": "DocToolPlugin $:/tags/BelowStory",
+            "modified": "20181226200512890",
+            "created": "20171025111006946"
+        },
+        "$:/plugins/mau/DocTool/ui/buttons/new-subtopic": {
+            "text": "<span class=\"tc-popup-keep\">\n<$button class=\"tc-btn-invisible\" popup=<<qualify \"$:/state/popup/new-subtopic\">> >\n<i class=\"fa fa-book\" aria-hidden=\"true\"></i>\n</$button>\n</span>\n<$reveal state=<<qualify \"$:/state/popup/new-subtopic\">> type=\"popup\" position=\"below\" animate=\"yes\">\n<div class=\"tc-drop-down\">\n<$list filter=\"[all[shadows+tiddlers]tag[$:/tags/TopicType]]\" variable=\"topic-type\">\n<$transclude tiddler=<<topic-type>> />\n</$list>\n</div>\n</$reveal>",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "title": "$:/plugins/mau/DocTool/ui/buttons/new-subtopic",
+            "tags": "DocToolPlugin $:/tags/ViewToolbar",
+            "modified": "20180409122922719",
+            "created": "20171204103151234"
+        },
+        "$:/plugins/mau/DocTool/ui/current-topic-path": {
+            "text": "<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"h\" filter=<<story-filter>> >\n<$wikify name=\"here\" text=<<h>> >\n<$macrocall $name=\"topic-path\" here=<<here>> />\n</$wikify>\n</$set>\n</$set>",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "tmap.id": "e5425381-02ec-4ba3-af64-df2347c51029",
+            "title": "$:/plugins/mau/DocTool/ui/current-topic-path",
+            "tags": "DocToolPlugin $:/tags/TopLeftBar",
+            "modifier": "Maurizio Boero - Yotta Tecnologie s.r.l.",
+            "modified": "20181226173910459",
+            "creator": "Maurizio Boero - Yotta Tecnologie s.r.l.",
+            "created": "20170706132730799"
+        }
+    }
+}
