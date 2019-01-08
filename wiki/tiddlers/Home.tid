@@ -1,0 +1,12 @@
+created: 20171208101341804
+modified: 20171208103807896
+tags: 
+title: Home
+type: text/vnd.tiddlywiki
+
+Goal for this wiki:
+
+* provide tools that provide hierarchical views of tiddlers content, suitable to produce documentation
+* help to write documents providing "ad-hoc" customizable templates for specific parts of the document
+* provide tools that exports tiddler content formatted to be converted/imported to Word
+

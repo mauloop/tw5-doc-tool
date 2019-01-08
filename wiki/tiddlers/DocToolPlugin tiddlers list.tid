@@ -1,0 +1,13 @@
+created: 20171103222542551
+modified: 20181226164835760
+tags: 
+title: DocToolPlugin tiddlers list
+type: text/vnd.tiddlywiki
+
+<$button class="tc-btn-invisible tc-tiddlylink">
+{{$:/core/images/export-button}} Export these tiddlers in a JSON bundle
+<$action-sendmessage $message="tm-download-file" $param="$:/core/templates/exporters/JsonFile" exportFilter="""[tag[DocToolPlugin]sort[title]]""" filename="DocToolPLugin.json"/>
+</$button>
+
+----
+{{{[tag[DocToolPlugin]sort[title]]}}}

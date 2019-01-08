@@ -1,0 +1,10 @@
+created: 20171025133805820
+modified: 20181226181850099
+title: $:/plugins/mau/DocTool/ui/below-story/view-template/title
+type: text/vnd.tiddlywiki
+
+<$link>
+<h1 class="tc-title">
+<$view field="title"/>
+</h1>
+</$link>

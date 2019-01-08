@@ -1,0 +1,70 @@
+textarea, .tw-edit-texteditor {
+    font-family: "Courier New";
+}
+
+.tgr-edge-weak {
+    visibility: hidden;
+}
+
+/*
+table, th { counter-reset: row -1 }
+tr { counter-increment: row }
+tr:before {
+    content: counter(row);
+    padding: 0 3px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell
+}
+*/
+
+/* Numbered titles */
+div.tc-tiddler-body .nr, div.tc-tiddler-preview-preview .nr {
+   counter-reset: h1counter;
+}
+div.tc-tiddler-body .nr h1, div.tc-tiddler-preview-preview .nr h1 {
+   counter-increment: h1counter;
+   counter-reset: h2counter;
+}
+div.tc-tiddler-body .nr h2, div.tc-tiddler-preview-preview .nr h2 {
+   counter-increment: h2counter;
+   counter-reset: h3counter;
+}
+div.tc-tiddler-body .nr h3, div.tc-tiddler-preview-preview .nr h3 {
+   counter-increment: h3counter;
+   counter-reset: h4counter;
+}
+div.tc-tiddler-body .nr h4, div.tc-tiddler-preview-preview .nr h4 {
+   counter-increment: h4counter;
+   counter-reset: h5counter;
+}
+div.tc-tiddler-body .nr h5, div.tc-tiddler-preview-preview .nr h5 {
+   counter-increment: h5counter;
+   counter-reset: h6counter;
+}
+div.tc-tiddler-body .nr h6, div.tc-tiddler-preview-preview .nr h6 {
+   counter-increment: h6counter;
+   counter-reset: h7counter;
+}
+div.tc-tiddler-body .nr h1::before, div.tc-tiddler-preview-preview .nr h1::before {
+   content: counter(h1counter) ".\0000a0\0000a0";
+}
+div.tc-tiddler-body .nr h2::before, div.tc-tiddler-preview-preview .nr h2::before {
+   content: counter(h1counter)"."counter(h2counter) ".\0000a0\0000a0";
+}
+div.tc-tiddler-body .nr h3::before, div.tc-tiddler-preview-preview .nr h3::before {
+   content: counter(h1counter)"."counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+}
+div.tc-tiddler-body .nr h4::before, div.tc-tiddler-preview-preview .nr h4::before {
+   content: counter(h1counter)"."counter(h2counter) "." counter(h3counter) "." counter(h4counter) ".\0000a0\0000a0";
+}
+div.tc-tiddler-body .nr h5::before, div.tc-tiddler-preview-preview .nr h5::before {
+   content: counter(h1counter)"."counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) ".\0000a0\0000a0";
+}
+div.tc-tiddler-body .nr h6::before, div.tc-tiddler-preview-preview .nr h6::before {
+   content: counter(h1counter)"."counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) ".\0000a0\0000a0";
+}
+div.tc-tiddler-body .nr h7::before, div.tc-tiddler-preview-preview .nr h4::before {
+   content: counter(h1counter)"."counter(h2counter) "." counter(h3counter) "." counter(h4counter) "." counter(h5counter) "." counter(h6counter) "." counter(h7counter) ".\0000a0\0000a0";
+   counter-increment: h7counter;
+}

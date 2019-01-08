@@ -1,0 +1,10 @@
+created: 20190107195521448
+modified: 20190108145918190
+tags: DocToolPlugin
+title: $:/plugins/mau/DocTool/tools/docx-export
+type: text/vnd.tiddlywiki
+
+<$button class="tc-btn-invisible tc-tiddlylink">
+{{$:/core/images/export-button}} Export JSON for DOCX-templates
+<$action-sendmessage $message="tm-download-file" $param="$:/plugins/mau/DocTool/exporters/json4docx" exportFilter="""[[json4docx.json]]""" filename="json4docx.json"/>
+</$button>

@@ -1,0 +1,13 @@
+created: 20190107194802565
+description: JSON for DOCX
+extension: .json
+modified: 20190108145918222
+tags: $:/tags/Exporter DocToolPlugin
+title: $:/plugins/mau/DocTool/exporters/json4docx
+type: text/vnd.tiddlywiki
+
+\define renderContent()
+<!-- $text text=<<jsontiddlers filter:"""$(exportFilter)$""">>/ -->
+{{{ $(exportFilter)$ +[limit[1]] ||$:/plugins/mau/DocTool/templates/json4docx}}}
+\end
+<$importvariables filter="[[$:/core/ui/PageMacros]] [all[shadows+tiddlers]tag[$:/tags/Macro]!has[draft.of]]"><<renderContent>></$importvariables>

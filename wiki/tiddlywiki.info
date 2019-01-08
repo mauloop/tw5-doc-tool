@@ -4,9 +4,10 @@
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
         "tiddlywiki/highlight",
-		"tiddlywiki/codemirror",
-		"felixhayashi/topstoryview",
-		"TheDiveO/FontAwesome"
+        "tiddlywiki/codemirror",
+        "felixhayashi/topstoryview",
+        "TheDiveO/FontAwesome",
+        "ahahn/tinka"
     ],
     "themes": [
         "tiddlywiki/vanilla",
