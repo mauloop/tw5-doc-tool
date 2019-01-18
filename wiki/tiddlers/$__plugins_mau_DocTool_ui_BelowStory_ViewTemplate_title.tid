@@ -1,6 +1,7 @@
 created: 20171025133805820
-modified: 20181226181850099
-title: $:/plugins/mau/DocTool/ui/below-story/view-template/title
+modified: 20190118153926677
+tags: DocToolPlugin
+title: $:/plugins/mau/DocTool/ui/BelowStory/ViewTemplate/title
 type: text/vnd.tiddlywiki
 
 <$link>
