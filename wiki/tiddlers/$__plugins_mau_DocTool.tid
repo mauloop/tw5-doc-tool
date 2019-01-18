@@ -3,12 +3,12 @@ core-version: >=5.1.17
 created: 20190108145021447
 dependents: FontAwesome CustomTemplates
 description: DocToolPlugin
-modified: 20190118173040215
+modified: 20190118224105157
 plugin-type: plugin
 source: https://github.com/mauloop/tw5-doc-tool
 title: $:/plugins/mau/DocTool
 type: application/json
-version: 0.1.5
+version: 0.1.6
 
 {
     "tiddlers": {
@@ -86,16 +86,6 @@ version: 0.1.5
             "modified": "20190118094333871",
             "created": "20171204174122793"
         },
-        "$:/plugins/mau/DocTool/config/readonly": {
-            "text": "false",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/plain",
-            "title": "$:/plugins/mau/DocTool/config/readonly",
-            "tags": "DocToolPlugin",
-            "modified": "20190118161206000",
-            "created": "20190118151714918"
-        },
         "$:/plugins/mau/DocTool/ui/BelowStory": {
             "text": "\\define sort-by-parent() \"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]\"\"\"\n\n<div class=\"below-story\">\n<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"parent\" filter=<<story-filter>> >\n<$wikify name=\"parent-list\" text=<<sort-by-parent>> >\n<$list filter=<<parent-list>> template=\"$:/plugins/mau/DocTool/ui/BelowStory/ViewTemplate\" />\n</$wikify>\n</$set>\n</$set>\n</div>",
             "bag": "default",
@@ -150,18 +140,6 @@ version: 0.1.5
             "list-before": "$:/core/ui/SideBar/Open",
             "created": "20190118105133400",
             "caption": "Contents"
-        },
-        "$:/plugins/mau/DocTool/ui/SideBarLists/lock": {
-            "text": "<div class=\"tc-sidebar-lists\">\n\n<$set name=\"searchTiddler\" value=\"$:/temp/search\">\n<div class=\"tc-search\">\n<$edit-text tiddler=\"$:/temp/search\" type=\"search\" tag=\"input\" focus={{$:/config/Search/AutoFocus}} focusPopup=<<qualify \"$:/state/popup/search-dropdown\">> class=\"tc-popup-handle\"/>\n<$reveal state=\"$:/temp/search\" type=\"nomatch\" text=\"\">\n<!-- $button tooltip={{$:/language/Buttons/AdvancedSearch/Hint}} aria-label={{$:/language/Buttons/AdvancedSearch/Caption}} class=\"tc-btn-invisible\">\n<$action-setfield $tiddler=\"$:/temp/advancedsearch\" text={{$:/temp/search}}/>\n<$action-setfield $tiddler=\"$:/temp/search\" text=\"\"/>\n<$action-navigate $to=\"$:/AdvancedSearch\"/>\n{{$:/core/images/advanced-search-button}}\n</$button -->\n<$button class=\"tc-btn-invisible\">\n<$action-setfield $tiddler=\"$:/temp/search\" text=\"\" />\n{{$:/core/images/close-button}}\n</$button>\n<$button popup=<<qualify \"$:/state/popup/search-dropdown\">> class=\"tc-btn-invisible\">\n<$set name=\"resultCount\" value=\"\"\"<$count filter=\"[!is[system]search{$(searchTiddler)$}]\"/>\"\"\">\n{{$:/core/images/down-arrow}} {{$:/language/Search/Matches}}\n</$set>\n</$button>\n</$reveal>\n<$reveal state=\"$:/temp/search\" type=\"match\" text=\"\">\n<!-- $button to=\"$:/AdvancedSearch\" tooltip={{$:/language/Buttons/AdvancedSearch/Hint}} aria-label={{$:/language/Buttons/AdvancedSearch/Caption}} class=\"tc-btn-invisible\">\n{{$:/core/images/advanced-search-button}}\n</$button -->\n</$reveal>\n</div>\n\n<$reveal tag=\"div\" class=\"tc-block-dropdown-wrapper\" state=\"$:/temp/search\" type=\"nomatch\" text=\"\">\n\n<$reveal tag=\"div\" class=\"tc-block-dropdown tc-search-drop-down tc-popup-handle\" state=<<qualify \"$:/state/popup/search-dropdown\">> type=\"nomatch\" text=\"\" default=\"\">\n\n{{$:/core/ui/SearchResults}}\n\n</$reveal>\n\n</$reveal>\n\n</$set>\n\n<$macrocall $name=\"tabs\" tabsList=\"[all[shadows+tiddlers]tag[$:/tags/SideBar]!has[draft.of]]\" default={{$:/config/DefaultSidebarTab}} state=\"$:/state/tab/sidebar\" />\n\n</div>\n",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/vnd.tiddlywiki",
-            "title": "$:/plugins/mau/DocTool/ui/SideBarLists/lock",
-            "tags": "DocToolPlugin",
-            "modifier": "Maurizio Boero - Yotta Tecnologie s.r.l.",
-            "modified": "20190118152421010",
-            "creator": "anonymous",
-            "created": "20160927231006227"
         },
         "$:/plugins/mau/DocTool/ui/TopLeftBar": {
             "text": "<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"h\" filter=<<story-filter>> >\n<$wikify name=\"here\" text=<<h>> >\n<$macrocall $name=\"topic-path\" here=<<here>> />\n</$wikify>\n</$set>\n</$set>",
