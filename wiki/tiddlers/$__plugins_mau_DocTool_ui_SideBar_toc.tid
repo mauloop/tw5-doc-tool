@@ -1,0 +1,9 @@
+caption: Contents
+created: 20190118105133400
+list-before: $:/core/ui/SideBar/Open
+modified: 20190119004207982
+tags: DocToolPlugin $:/tags/SideBar
+title: $:/plugins/mau/DocTool/ui/SideBar/toc
+type: text/vnd.tiddlywiki
+
+<$vars doc-id={{$:/plugins/mau/DocTool/config/doc-id}}><$macrocall $name="doc-toc" root={{$:/plugins/mau/DocTool/config/doc-root}}/></$vars>
