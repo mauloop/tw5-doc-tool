@@ -1,14 +1,14 @@
 author: Maurizio Boero
 core-version: >=5.1.17
 created: 20190108145021447
-dependents: FontAwesome
+dependents: FontAwesome CustomTemplates
 description: DocToolPlugin
-modified: 20190119005545934
+modified: 20190119155114811
 plugin-type: plugin
 source: https://github.com/mauloop/tw5-doc-tool
 title: $:/plugins/mau/DocTool
 type: application/json
-version: 0.1.7
+version: 0.1.9
 
 {
     "tiddlers": {
@@ -34,17 +34,6 @@ version: 0.1.7
             "description": "JSON for DOCX",
             "created": "20190107194802565"
         },
-        "$:/plugins/mau/DocTool/macros/topic-path": {
-            "text": "\\define topic-path(here, parent:\"\", path:\"\")\n<$set name=\"parent\" value={{{[[$here$]get[$(doc-id)$parent]]}}}>\n<$set name=\"next\" filter=\"\"\"[[$here$]get[$(doc-id)$parent]]\"\"\" value=\"add-path\" emptyValue=\"print-path\">\n<$macrocall $name=<<next>> here=\"\"\"$here$\"\"\" parent=<<parent>> path=\"\"\"$path$\"\"\" />\n</$set>\n</$set>\n\\end\n\n\\define add-path(here, parent, path)\n<$macrocall $name=\"title-path\" here=\"\"\"$parent$\"\"\" parent=\"\" path=\"\"\"[[$here$]] $path$\"\"\"/>\n\\end\n\n\\define print-path(here, parent, path)\n<table class=\"topic-path noBorder\"><tr>\n<$list filter=\"\"\"[[$here$]] $path$\"\"\">\n<$set name=\"caret\" filter=\"\"\"[enlist[$here$]]\"\"\" value=\"\"\"<i class=\"fa fa-1x fa-caret-right\"/>\"\"\" emptyValue=\"\">\n<td style=\"white-space:nowrap;word-break:keep-all;\"><$link><<currentTiddler>> <<caret>></$link></td>\n</$set>\n</$list>\n</tr></table>\n\\end\n\n<!--\n\\define printPath(here, parent, path)\n<$list filter=\"\"\"[[$here$]] $path$\"\"\">\n<$macrocall $name=\"displayPathPills\" item=<<currentTiddler>> />\n</$list>\n\\end\n\n\\define displayPathPills(item)\n<$macrocall $name=\"tag-pill\" tag=\"\"\"$item$\"\"\" element-tag=\"$button\" actions=<<pathActions>> />\n\\end\n\n\\define pathActions(item)\n{{$:/core/images/right-arrow}}<$action-navigate/>\n\\end\n-->",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/vnd.tiddlywiki",
-            "tmap.id": "e5425381-02ec-4ba3-af64-df2347c51029",
-            "title": "$:/plugins/mau/DocTool/macros/topic-path",
-            "tags": "DocToolPlugin $:/tags/Macro",
-            "modified": "20181226180214854",
-            "created": "20170719131238686"
-        },
         "$:/plugins/mau/DocTool/templates/json4docx": {
             "text": "<!--\n\nThis template is used for saving tiddlers in JSON format to feed DOCX-templates\n\n--><$view field=\"text\" format=\"plainwikified\" />\n",
             "bag": "default",
@@ -54,27 +43,6 @@ version: 0.1.7
             "tags": "DocToolPlugin",
             "modified": "20190107212735669",
             "created": "20190107201120571"
-        },
-        "$:/plugins/mau/DocTool/ui/buttons/new-subtopic": {
-            "text": "<span class=\"tc-popup-keep\">\n<$button class=\"tc-btn-invisible\" popup=<<qualify \"$:/state/popup/new-subtopic\">> >\n<i class=\"fa fa-book\" aria-hidden=\"true\"></i>\n</$button>\n</span>\n<$reveal state=<<qualify \"$:/state/popup/new-subtopic\">> type=\"popup\" position=\"below\" animate=\"yes\">\n<div class=\"tc-drop-down\">\n<$list filter=\"[all[shadows+tiddlers]tag[$:/tags/TopicType]]\" variable=\"topic-type\">\n<$transclude tiddler=<<topic-type>> />\n</$list>\n</div>\n</$reveal>",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/vnd.tiddlywiki",
-            "title": "$:/plugins/mau/DocTool/ui/buttons/new-subtopic",
-            "tags": "DocToolPlugin $:/tags/ViewToolbar",
-            "modified": "20180409122922719",
-            "created": "20171204103151234"
-        },
-        "$:/plugins/mau/DocTool/macros/doctool-toc": {
-            "text": "\\define ok-to-write-index(t,ti) <$action-setfield $tiddler=\"\"\"$t$\"\"\" $field=\"\"\"$(doc-id)$index\"\"\" $value=\"$ti$\" />\n\n\\define set-ti(pi,i) $pi$.$i$\n\n\\define doc-rebuild-index-part() <$macrocall $name=\"doc-rebuild-index\" t={{!!title}} i={{!!$(doc-id)$index}} />\n\n\\define doc-rebuild-index(t,i,p,pi)\n<!--\nt: current topic\ni: incremental interger to append to pi to obtain current topic index (ti)\np: parent topic\npi: parent topic index (x.y. ...)\nti: topic index (x.y. ... .i)\n-->\n\n<$set name=\"ti\" filter=\"\"\"[enlist[$pi$]]\"\"\" value=<<set-ti \"\"\"$pi$\"\"\" \"\"\"$i$\"\"\">> emptyValue=\"\"\"$i$\"\"\">\n\n<$set name=\"write-index\" filter=\"\"\"[<ti>] -[[$t$]get[$(doc-id)$index]]\"\"\" value=\"ok-to-write-index\" emptyValue=\"do-not-write-index\">\n<$macrocall $name=<<write-index>> t=\"\"\"$t$\"\"\" ti=<<ti>> />\n</$set>\n\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]\"\"\" variable=\"list-item\">\n<$macrocall $name=\"doc-rebuild-index\" t=<<list-item>> i=<<incr \"\"\"$i$\"\"\">> p=\"\"\"$p$\"\"\" pi=\"\"\"$pi$\"\"\"/>\n</$list>\n\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$t$]sortby{$t$!!$(doc-id)$list}first[]]\"\"\" variable=\"list-item\">\n<$macrocall $name=\"doc-rebuild-index\" t=<<list-item>> i=\"1\" p=\"\"\"$t$\"\"\" pi=<<ti>>/>\n</$list>\n\n</$set>\n\\end\n\n\\define doc-toc-state() $:/state/toc/$(currentTiddler)$\n\n\\define caret(expand:\"yes\", recurse:\"yes\") <$reveal type=\"match\" text=\"yes-yes\" default=\"\"\"$expand$-$recurse$\"\"\" ><$set name=\"c\" filter=\"\"\"[{$(doc-toc-state)$}] -[[show]]\"\"\" value=\"caret-right\" emptyValue=\"caret-down\"><$macrocall $name=<<c>>/></$set></$reveal>\n\n\\define caret-right() <$button set=<<doc-toc-state>> setTo=\"show\" class=\"tc-btn-invisible tc-tiddlylink\"><i class=\"fa fa-1x fa-caret-right\"/></$button>\n\n\\define caret-down() <$button class=\"tc-btn-invisible tc-tiddlylink\"><i class=\"fa fa-1x fa-caret-down\"/><$action-deletetiddler $tiddler=<<doc-toc-state>> /></$button>\n\n\\define doc-toc-recurse(expand:\"yes\", recurse:\"yes\", edit:\"yes\", rebuild:\"yes\") \n\n<$reveal type=\"match\" text=\"yes-yes\" default=\"\"\"$expand$-$recurse$\"\"\" >\n<$set name=\"r\" filter=\"\"\"[{$(doc-toc-state)$}] -[[show]]\"\"\" value=\"\" emptyValue=\"doc-toc\"><$macrocall $name=<<r>> root=<<currentTiddler>> expand=\"\"\"$expand$\"\"\" recurse=\"\"\"$recurse$\"\"\" edit=\"\"\"$edit$\"\"\" rebuild=\"\"\"$rebuild$\"\"\"/></$set>\n</$reveal>\n\n<$reveal type=\"match\" text=\"no-yes\" default=\"\"\"$expand$-$recurse$\"\"\" >\n<<doc-toc \"\"\"$(currentTiddler)$\"\"\" \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\" \"\"\"$edit$\"\"\" \"no\">>\n</$reveal>\n\n\\end\n\n\n\\define ok-to-drop(p)\n<$action-listops $tiddler=\"\"\"$p$\"\"\" $field=\"$(doc-id)$list\" $filter=\"\"\"[$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]\"\"\"/>\n<$action-setfield $tiddler=<<actionTiddler>> $(doc-id)$parent=\"\"\"$p$\"\"\"/>\n\\end\n\n\\define doc-toc-drop-actions(p)\n<$set name=\"action-index\" value={{{[<actionTiddler>get[$(doc-id)$index]]}}}>\n<$set name=\"doc-toc-drop\" filter=\"\"\"[all[current]get[$(doc-id)$index]] +[removeprefix<action-index>]\"\"\" value=\"do-not-drop\"  emptyValue=\"ok-to-drop\">\n<!-- $action-setfield $tiddler=\"Debug\" ct=<<currentTiddler>> />\n<$action-setfield $tiddler=\"Debug\" at=<<actionTiddler>> />\n<$action-setfield $tiddler=\"Debug\" ci={{{[all[current]get[$(doc-id)$index]]}}} />\n<$action-setfield $tiddler=\"Debug\" ai=<<action-index>> / -->\n<$macrocall $name=<<doc-toc-drop>> p=\"\"\"$p$\"\"\"/>\n</$set>\n</$set>\n\\end\n\n\\define doc-toc(root, expand:\"yes\", recurse:\"yes\", edit:\"yes\", rebuild:\"yes\")\n<ul class=\"fa-ul\">\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$root$]sortby{$root$!!$(doc-id)$list}]\"\"\">\n<$vars i={{!!$(doc-id)$index}}>\n<$reveal type=\"match\" text=\"yes\" default=\"\"\"$edit$\"\"\" >\n<li><$droppable actions=<<doc-toc-drop-actions \"\"\"$root$\"\"\">> >\n<div class=\"tc-droppable-placeholder\">&nbsp;</div>\n<<caret \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\">> <$link to={{!!title}}><$view field=\"$(doc-id)$index\"/> <$view field=\"caption\">{{!!title}}</$view></$link>\n</$droppable></li>\n</$reveal>\n<$reveal type=\"nomatch\" text=\"yes\" default=\"\"\"$edit$\"\"\" >\n<li><<caret \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\">> <$link to={{!!title}}><$view field=\"$(doc-id)$index\"/> <$view field=\"caption\">{{!!title}}</$view></$link></li>\n</$reveal>\n</$vars>\n<<doc-toc-recurse \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\" \"\"\"$edit$\"\"\" \"no\">>\n</$list>\n<$reveal type=\"match\" text=\"yes\" default=\"\"\"$edit$\"\"\" >\n<$tiddler tiddler=\"\"\"$root$\"\"\">\n<li><$droppable actions=<<doc-toc-drop-actions \"\"\"$root$\"\"\">> >\n<div class=\"tc-droppable-placeholder\">&nbsp;</div>\n@@color:transparent;=====@@\n</$droppable></li>\n</$tiddler>\n</$reveal>\n</ul>\n<$reveal type=\"match\" text=\"yes-yes\" default=\"\"\"$edit$-$rebuild$\"\"\" >\n<$button class=\"tc-btn-invisible tc-tiddlylink\" actions=<<doc-rebuild-index \"Doc sample\">>>\nRebuild index\n</$button>\n</$reveal>\n\\end\n",
-            "bag": "default",
-            "revision": "22",
-            "type": "text/vnd.tiddlywiki",
-            "tmap.id": "90e1c8fb-5069-4800-9497-87c9c2371c51",
-            "title": "$:/plugins/mau/DocTool/macros/doctool-toc",
-            "tags": "$:/tags/Macro DocToolPlugin",
-            "modified": "20190118094333871",
-            "created": "20171204174122793"
         },
         "$:/plugins/mau/DocTool/ui/BelowStory": {
             "text": "\\define sort-by-parent() \"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]\"\"\"\n\n<div class=\"below-story\">\n<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"parent\" filter=<<story-filter>> >\n<$wikify name=\"parent-list\" text=<<sort-by-parent>> >\n<$list filter=<<parent-list>> template=\"$:/plugins/mau/DocTool/ui/BelowStory/ViewTemplate\" />\n</$wikify>\n</$set>\n</$set>\n</div>",
@@ -107,29 +75,6 @@ version: 0.1.7
             "modified": "20190118153926677",
             "created": "20171025133805820"
         },
-        "$:/plugins/mau/DocTool/ui/TopLeftBar": {
-            "text": "<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"h\" filter=<<story-filter>> >\n<$wikify name=\"here\" text=<<h>> >\n<$macrocall $name=\"topic-path\" here=<<here>> />\n</$wikify>\n</$set>\n</$set>",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/vnd.tiddlywiki",
-            "tmap.id": "e5425381-02ec-4ba3-af64-df2347c51029",
-            "title": "$:/plugins/mau/DocTool/ui/TopLeftBar",
-            "tags": "DocToolPlugin $:/tags/TopLeftBar",
-            "modifier": "Maurizio Boero - Yotta Tecnologie s.r.l.",
-            "modified": "20190118152538683",
-            "creator": "Maurizio Boero - Yotta Tecnologie s.r.l.",
-            "created": "20170706132730799"
-        },
-        "$:/plugins/mau/DocTool/config/doc-id": {
-            "created": "20181226170948536",
-            "text": "",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/plain",
-            "title": "$:/plugins/mau/DocTool/config/doc-id",
-            "tags": "DocToolPlugin",
-            "modified": "20190119004511375"
-        },
         "$:/plugins/mau/DocTool/config/doc-root": {
             "created": "20190119003836676",
             "text": "Home",
@@ -151,6 +96,61 @@ version: 0.1.7
             "modified": "20190119004206487",
             "list-before": "$:/core/ui/SideBar/Open",
             "caption": "Contents"
+        },
+        "$:/plugins/mau/DocTool/macros/doc-path": {
+            "created": "20170719131238686",
+            "text": "\\define doc-path(here, parent:\"\", path:\"\")\n<$set name=\"parent\" value={{{[[$here$]get[$(doc-id)$parent]]}}}>\n<$set name=\"next\" filter=\"\"\"[[$here$]get[$(doc-id)$parent]]\"\"\" value=\"doc-path-add\" emptyValue=\"doc-path-print\">\n<$macrocall $name=<<next>> here=\"\"\"$here$\"\"\" parent=<<parent>> path=\"\"\"$path$\"\"\" />\n</$set>\n</$set>\n\\end\n\n\\define doc-path-add(here, parent, path)\n<$macrocall $name=\"doc-path\" here=\"\"\"$parent$\"\"\" parent=\"\" path=\"\"\"[[$here$]] $path$\"\"\"/>\n\\end\n\n\\define doc-path-print(here, parent, path)\n<table class=\"doc-path noBorder\"><tr>\n<$list filter=\"\"\"[[$here$]] $path$\"\"\">\n<$set name=\"caret\" filter=\"\"\"[enlist[$here$]]\"\"\" value=\"\"\"<i class=\"fa fa-1x fa-caret-right\"/>\"\"\" emptyValue=\"\">\n<td style=\"white-space:nowrap;word-break:keep-all;\"><$link><<currentTiddler>> <<caret>></$link></td>\n</$set>\n</$list>\n</tr></table>\n\\end",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "tmap.id": "e5425381-02ec-4ba3-af64-df2347c51029",
+            "title": "$:/plugins/mau/DocTool/macros/doc-path",
+            "tags": "DocToolPlugin $:/tags/Macro",
+            "modified": "20190119152348583"
+        },
+        "$:/plugins/mau/DocTool/ui/TopLeftBar": {
+            "created": "20170706132730799",
+            "text": "<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"h\" filter=<<story-filter>> >\n<$wikify name=\"here\" text=<<h>> >\n<$macrocall $name=\"doc-path\" here=<<here>> />\n</$wikify>\n</$set>\n</$set>",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "tmap.id": "e5425381-02ec-4ba3-af64-df2347c51029",
+            "title": "$:/plugins/mau/DocTool/ui/TopLeftBar",
+            "tags": "DocToolPlugin $:/tags/TopLeftBar",
+            "modifier": "Maurizio Boero - Yotta Tecnologie s.r.l.",
+            "modified": "20190119152516905",
+            "creator": "Maurizio Boero - Yotta Tecnologie s.r.l."
+        },
+        "$:/plugins/mau/DocTool/macros/doc-toc": {
+            "created": "20171204174122793",
+            "text": "\\define ok-to-write-index(t,ti) <$action-setfield $tiddler=\"\"\"$t$\"\"\" $field=\"\"\"$(doc-id)$index\"\"\" $value=\"$ti$\" />\n\n\\define set-ti(pi,i) $pi$.$i$\n\n\\define doc-rebuild-index-part() <$macrocall $name=\"doc-rebuild-index\" t={{!!title}} i={{!!$(doc-id)$index}} />\n\n\\define doc-rebuild-index(t,i,p,pi)\n<!--\nt: current topic\ni: incremental interger to append to pi to obtain current topic index (ti)\np: parent topic\npi: parent topic index (x.y. ...)\nti: topic index (x.y. ... .i)\n-->\n\n<$set name=\"ti\" filter=\"\"\"[enlist[$pi$]]\"\"\" value=<<set-ti \"\"\"$pi$\"\"\" \"\"\"$i$\"\"\">> emptyValue=\"\"\"$i$\"\"\">\n\n<$set name=\"write-index\" filter=\"\"\"[<ti>] -[[$t$]get[$(doc-id)$index]]\"\"\" value=\"ok-to-write-index\" emptyValue=\"do-not-write-index\">\n<$macrocall $name=<<write-index>> t=\"\"\"$t$\"\"\" ti=<<ti>> />\n</$set>\n\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]\"\"\" variable=\"list-item\">\n<$macrocall $name=\"doc-rebuild-index\" t=<<list-item>> i=<<incr \"\"\"$i$\"\"\">> p=\"\"\"$p$\"\"\" pi=\"\"\"$pi$\"\"\"/>\n</$list>\n\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$t$]sortby{$t$!!$(doc-id)$list}first[]]\"\"\" variable=\"list-item\">\n<$macrocall $name=\"doc-rebuild-index\" t=<<list-item>> i=\"1\" p=\"\"\"$t$\"\"\" pi=<<ti>>/>\n</$list>\n\n</$set>\n\\end\n\n\\define doc-toc-state() $:/state/toc/$(currentTiddler)$\n\n\\define caret(expand:\"yes\", recurse:\"yes\") <$reveal type=\"match\" text=\"yes-yes\" default=\"\"\"$expand$-$recurse$\"\"\" ><$set name=\"c\" filter=\"\"\"[{$(doc-toc-state)$}] -[[show]]\"\"\" value=\"caret-right\" emptyValue=\"caret-down\"><$macrocall $name=<<c>>/></$set></$reveal>\n\n\\define caret-right() <$button set=<<doc-toc-state>> setTo=\"show\" class=\"tc-btn-invisible tc-tiddlylink\"><i class=\"fa fa-1x fa-caret-right\"/></$button>\n\n\\define caret-down() <$button class=\"tc-btn-invisible tc-tiddlylink\"><i class=\"fa fa-1x fa-caret-down\"/><$action-deletetiddler $tiddler=<<doc-toc-state>> /></$button>\n\n\\define doc-toc-recurse(expand:\"yes\", recurse:\"yes\", edit:\"yes\", rebuild:\"yes\") \n\n<$reveal type=\"match\" text=\"yes-yes\" default=\"\"\"$expand$-$recurse$\"\"\" >\n<$set name=\"r\" filter=\"\"\"[{$(doc-toc-state)$}] -[[show]]\"\"\" value=\"\" emptyValue=\"doc-toc\"><$macrocall $name=<<r>> root=<<currentTiddler>> expand=\"\"\"$expand$\"\"\" recurse=\"\"\"$recurse$\"\"\" edit=\"\"\"$edit$\"\"\" rebuild=\"\"\"$rebuild$\"\"\"/></$set>\n</$reveal>\n\n<$reveal type=\"match\" text=\"no-yes\" default=\"\"\"$expand$-$recurse$\"\"\" >\n<<doc-toc \"\"\"$(currentTiddler)$\"\"\" \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\" \"\"\"$edit$\"\"\" \"no\">>\n</$reveal>\n\n\\end\n\n\n\\define ok-to-drop(p)\n<$action-listops $tiddler=\"\"\"$p$\"\"\" $field=\"$(doc-id)$list\" $filter=\"\"\"[$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]\"\"\"/>\n<$action-setfield $tiddler=<<actionTiddler>> $(doc-id)$parent=\"\"\"$p$\"\"\"/>\n\\end\n\n\\define doc-toc-drop-actions(p)\n<$set name=\"action-index\" value={{{[<actionTiddler>get[$(doc-id)$index]]}}}>\n<$set name=\"doc-toc-drop\" filter=\"\"\"[all[current]get[$(doc-id)$index]] +[removeprefix<action-index>]\"\"\" value=\"do-not-drop\"  emptyValue=\"ok-to-drop\">\n<!-- $action-setfield $tiddler=\"Debug\" ct=<<currentTiddler>> />\n<$action-setfield $tiddler=\"Debug\" at=<<actionTiddler>> />\n<$action-setfield $tiddler=\"Debug\" ci={{{[all[current]get[$(doc-id)$index]]}}} />\n<$action-setfield $tiddler=\"Debug\" ai=<<action-index>> / -->\n<$macrocall $name=<<doc-toc-drop>> p=\"\"\"$p$\"\"\"/>\n</$set>\n</$set>\n\\end\n\n\\define doc-toc(root, expand:\"yes\", recurse:\"yes\", edit:\"yes\", rebuild:\"yes\")\n<ul class=\"fa-ul\">\n<$list filter=\"\"\"[has[$(doc-id)$parent]$(doc-id)$parent[$root$]sortby{$root$!!$(doc-id)$list}]\"\"\">\n<$vars i={{!!$(doc-id)$index}}>\n<$reveal type=\"match\" text=\"yes\" default=\"\"\"$edit$\"\"\" >\n<li><$droppable actions=<<doc-toc-drop-actions \"\"\"$root$\"\"\">> >\n<div class=\"tc-droppable-placeholder\">&nbsp;</div>\n<<caret \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\">> <$link to={{!!title}}><$view field=\"$(doc-id)$index\"/> <$view field=\"caption\">{{!!title}}</$view></$link>\n</$droppable></li>\n</$reveal>\n<$reveal type=\"nomatch\" text=\"yes\" default=\"\"\"$edit$\"\"\" >\n<li><<caret \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\">> <$link to={{!!title}}><$view field=\"$(doc-id)$index\"/> <$view field=\"caption\">{{!!title}}</$view></$link></li>\n</$reveal>\n</$vars>\n<<doc-toc-recurse \"\"\"$expand$\"\"\" \"\"\"$recurse$\"\"\" \"\"\"$edit$\"\"\" \"no\">>\n</$list>\n<$reveal type=\"match\" text=\"yes\" default=\"\"\"$edit$\"\"\" >\n<$tiddler tiddler=\"\"\"$root$\"\"\">\n<li><$droppable actions=<<doc-toc-drop-actions \"\"\"$root$\"\"\">> >\n<div class=\"tc-droppable-placeholder\">&nbsp;</div>\n@@color:transparent;=====@@\n</$droppable></li>\n</$tiddler>\n</$reveal>\n</ul>\n<$reveal type=\"match\" text=\"yes-yes\" default=\"\"\"$edit$-$rebuild$\"\"\" >\n<$button class=\"tc-btn-invisible tc-tiddlylink\" actions=<<doc-rebuild-index \"Doc sample\">>>\nRebuild index\n</$button>\n</$reveal>\n\\end\n",
+            "bag": "default",
+            "revision": "22",
+            "type": "text/vnd.tiddlywiki",
+            "tmap.id": "90e1c8fb-5069-4800-9497-87c9c2371c51",
+            "title": "$:/plugins/mau/DocTool/macros/doc-toc",
+            "tags": "$:/tags/Macro DocToolPlugin",
+            "modified": "20190119152557791"
+        },
+        "$:/plugins/mau/DocTool/ui/ViewToolbar/new-subtopic": {
+            "created": "20171204103151234",
+            "text": "<span class=\"tc-popup-keep\">\n<$button class=\"tc-btn-invisible\" popup=<<qualify \"$:/state/popup/new-subtopic\">> >\n<i class=\"fa fa-book\" aria-hidden=\"true\"></i>\n</$button>\n</span>\n<$reveal state=<<qualify \"$:/state/popup/new-subtopic\">> type=\"popup\" position=\"below\" animate=\"yes\">\n<div class=\"tc-drop-down\">\n<$list filter=\"[all[shadows+tiddlers]tag[$:/tags/TopicType]]\" variable=\"topic-type\">\n<$transclude tiddler=<<topic-type>> />\n</$list>\n</div>\n</$reveal>",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "title": "$:/plugins/mau/DocTool/ui/ViewToolbar/new-subtopic",
+            "tags": "DocToolPlugin $:/tags/ViewToolbar",
+            "modified": "20190119154234059"
+        },
+        "$:/plugins/mau/DocTool/config/doc-id": {
+            "created": "20181226170948536",
+            "text": "",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/plain",
+            "title": "$:/plugins/mau/DocTool/config/doc-id",
+            "tags": "DocToolPlugin",
+            "modified": "20190119154947409"
         }
     }
 }
