@@ -1,14 +1,14 @@
 author: Maurizio Boero
 core-version: >=5.1.17
 created: 20190108145021447
-dependents: FontAwesome CustomTemplates
+dependents: FontAwesome
 description: DocToolPlugin
-modified: 20190118224105157
+modified: 20190119005545934
 plugin-type: plugin
 source: https://github.com/mauloop/tw5-doc-tool
 title: $:/plugins/mau/DocTool
 type: application/json
-version: 0.1.6
+version: 0.1.7
 
 {
     "tiddlers": {
@@ -21,16 +21,6 @@ version: 0.1.6
             "tags": "$:/tags/Stylesheet DocToolPlugin",
             "modified": "20181226180119872",
             "created": "20181226175427303"
-        },
-        "$:/plugins/mau/DocTool/config/doc-id": {
-            "text": "sample-",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/plain",
-            "title": "$:/plugins/mau/DocTool/config/doc-id",
-            "tags": "DocToolPlugin",
-            "modified": "20181226180414515",
-            "created": "20181226170948536"
         },
         "$:/plugins/mau/DocTool/exporters/json4docx": {
             "text": "\\define renderContent()\n<!-- $text text=<<jsontiddlers filter:\"\"\"$(exportFilter)$\"\"\">>/ -->\n{{{ $(exportFilter)$ +[limit[1]] ||$:/plugins/mau/DocTool/templates/json4docx}}}\n\\end\n<$importvariables filter=\"[[$:/core/ui/PageMacros]] [all[shadows+tiddlers]tag[$:/tags/Macro]!has[draft.of]]\"><<renderContent>></$importvariables>\n",
@@ -117,30 +107,6 @@ version: 0.1.6
             "modified": "20190118153926677",
             "created": "20171025133805820"
         },
-        "$:/plugins/mau/DocTool/ui/CustomTemplates/view/toc": {
-            "text": "<$set name=\"toc-state\" value={{{[[$:/state/toc/]] +[addsuffix<currentTiddler>]}}} >\n\n<$reveal type=\"nomatch\" state=<<toc-state>> text=\"show\" default=\"hide\">\n<$button class=\"tc-btn-invisible tc-tiddlylink\" set=<<toc-state>> setTo=\"show\">Show TOC <i class=\"fa fa-1x fa-caret-down\"/></$button>\n</$reveal>\n\n<$reveal type=\"match\" state=<<toc-state>> text=\"show\" default=\"hide\">\n<$button class=\"tc-btn-invisible tc-tiddlylink\">\nHide TOC <i class=\"fa fa-1x fa-caret-up\"/>\n<$action-deletetiddler $tiddler=<<toc-state>> />\n</$button>\n<blockquote>\n\n<$reveal state=\"$:/plugins/mau/DocTool/config/readonly\" type=\"match\" text=\"true\">\n<$macrocall $name=\"doc-toc\" root={{!!title}} expand=\"no\" recurse=\"no\" edit=\"no\"/>\n</$reveal>\n\n<$reveal state=\"$:/plugins/mau/DocTool/config/readonly\" type=\"nomatch\" text=\"true\">\n<$macrocall $name=\"doc-toc\" root={{!!title}}  expand=\"no\" recurse=\"no\"/>\n</$reveal>\n\n</blockquote>\n</$reveal>\n<hr>\n\n</$set>",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/vnd.tiddlywiki",
-            "title": "$:/plugins/mau/DocTool/ui/CustomTemplates/view/toc",
-            "tags": "DocToolPlugin",
-            "modifier": "Maurizio Boero - Yotta Tecnologie s.r.l.",
-            "modified": "20190118161234516",
-            "creator": "Maurizio Boero",
-            "created": "20160930085139136"
-        },
-        "$:/plugins/mau/DocTool/ui/SideBar/toc": {
-            "text": "<$vars doc-id={{$:/plugins/mau/DocTool/config/doc-id}}><<doc-toc \"Doc sample\">></$vars>",
-            "bag": "default",
-            "revision": "0",
-            "type": "text/vnd.tiddlywiki",
-            "title": "$:/plugins/mau/DocTool/ui/SideBar/toc",
-            "tags": "DocToolPlugin $:/tags/SideBar",
-            "modified": "20190118152453845",
-            "list-before": "$:/core/ui/SideBar/Open",
-            "created": "20190118105133400",
-            "caption": "Contents"
-        },
         "$:/plugins/mau/DocTool/ui/TopLeftBar": {
             "text": "<$set name=\"doc-id\" value={{$:/plugins/mau/DocTool/config/doc-id}}>\n<$set name=\"h\" filter=<<story-filter>> >\n<$wikify name=\"here\" text=<<h>> >\n<$macrocall $name=\"topic-path\" here=<<here>> />\n</$wikify>\n</$set>\n</$set>",
             "bag": "default",
@@ -153,6 +119,38 @@ version: 0.1.6
             "modified": "20190118152538683",
             "creator": "Maurizio Boero - Yotta Tecnologie s.r.l.",
             "created": "20170706132730799"
+        },
+        "$:/plugins/mau/DocTool/config/doc-id": {
+            "created": "20181226170948536",
+            "text": "",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/plain",
+            "title": "$:/plugins/mau/DocTool/config/doc-id",
+            "tags": "DocToolPlugin",
+            "modified": "20190119004511375"
+        },
+        "$:/plugins/mau/DocTool/config/doc-root": {
+            "created": "20190119003836676",
+            "text": "Home",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/plain",
+            "title": "$:/plugins/mau/DocTool/config/doc-root",
+            "tags": "DocToolPlugin",
+            "modified": "20190119004528366"
+        },
+        "$:/plugins/mau/DocTool/ui/SideBar/toc": {
+            "created": "20190118105133400",
+            "text": "<$vars doc-id={{$:/plugins/mau/DocTool/config/doc-id}}><$macrocall $name=\"doc-toc\" root={{$:/plugins/mau/DocTool/config/doc-root}}/></$vars>",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/vnd.tiddlywiki",
+            "title": "$:/plugins/mau/DocTool/ui/SideBar/toc",
+            "tags": "DocToolPlugin $:/tags/SideBar",
+            "modified": "20190119004206487",
+            "list-before": "$:/core/ui/SideBar/Open",
+            "caption": "Contents"
         }
     }
 }
