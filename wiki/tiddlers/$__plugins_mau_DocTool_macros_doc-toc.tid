@@ -1,0 +1,108 @@
+created: 20171204174122793
+modified: 20190213173419920
+tags: $:/tags/Macro DocToolPlugin
+title: $:/plugins/mau/DocTool/macros/doc-toc
+tmap.id: 90e1c8fb-5069-4800-9497-87c9c2371c51
+type: text/vnd.tiddlywiki
+
+\define ok-to-write-index(t,ti) <$action-setfield $tiddler="""$t$""" $field="""$(doc-id)$index""" $value="$ti$" />
+
+\define set-ti(pi,i) $pi$.$i$
+
+\define doc-rebuild-index-part() <$macrocall $name="doc-rebuild-index" t={{!!title}} i={{!!$(doc-id)$index}} />
+
+\define doc-rebuild-index(t,i,p,pi)
+<!--
+t: current topic
+i: incremental interger to append to pi to obtain current topic index (ti)
+p: parent topic
+pi: parent topic index (x.y. ...)
+ti: topic index (x.y. ... .i)
+-->
+
+<$set name="ti" filter="""[enlist[$pi$]]""" value=<<set-ti """$pi$""" """$i$""">> emptyValue="""$i$""">
+
+<$set name="write-index" filter="""[<ti>] -[[$t$]get[$(doc-id)$index]]""" value="ok-to-write-index" emptyValue="do-not-write-index">
+<$macrocall $name=<<write-index>> t="""$t$""" ti=<<ti>> />
+</$set>
+
+<$list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]""" variable="list-item">
+<$macrocall $name="doc-rebuild-index" t=<<list-item>> i=<<incr """$i$""">> p="""$p$""" pi="""$pi$"""/>
+</$list>
+
+<$list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$t$]sortby{$t$!!$(doc-id)$list}first[]]""" variable="list-item">
+<$macrocall $name="doc-rebuild-index" t=<<list-item>> i="1" p="""$t$""" pi=<<ti>>/>
+</$list>
+
+</$set>
+\end
+
+\define doc-toc-state() $:/state/toc/$(currentTiddler)$
+
+\define caret(expand:"yes", recurse:"yes") <$reveal type="match" text="yes-yes" default="""$expand$-$recurse$""" ><$set name="c" filter="""[{$(doc-toc-state)$}] -[[show]]""" value="caret-right" emptyValue="caret-down"><$macrocall $name=<<c>>/></$set></$reveal>
+
+\define caret-right() <$button set=<<doc-toc-state>> setTo="show" class="tc-btn-invisible tc-tiddlylink"><i class="fa fa-1x fa-caret-right"/></$button>
+
+\define caret-down() <$button class="tc-btn-invisible tc-tiddlylink"><i class="fa fa-1x fa-caret-down"/><$action-deletetiddler $tiddler=<<doc-toc-state>> /></$button>
+
+\define doc-toc-recurse(expand:"yes", recurse:"yes", edit:"yes", rebuild:"yes") 
+
+<$reveal type="match" text="yes-yes" default="""$expand$-$recurse$""" >
+<$set name="r" filter="""[{$(doc-toc-state)$}] -[[show]]""" value="" emptyValue="doc-toc"><$macrocall $name=<<r>> root=<<currentTiddler>> expand="""$expand$""" recurse="""$recurse$""" edit="""$edit$""" rebuild="""$rebuild$"""/></$set>
+</$reveal>
+
+<$reveal type="match" text="no-yes" default="""$expand$-$recurse$""" >
+<<doc-toc """$(currentTiddler)$""" """$expand$""" """$recurse$""" """$edit$""" "no">>
+</$reveal>
+
+\end
+
+
+\define ok-to-drop(p)
+<$action-listops $tiddler="""$p$""" $field="$(doc-id)$list" $filter="""[$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]"""/>
+<$action-setfield $tiddler=<<actionTiddler>> $(doc-id)$parent="""$p$"""/>
+\end
+
+\define doc-toc-drop-actions(p)
+<$set name="action-index" value={{{[<actionTiddler>get[$(doc-id)$index]]}}}>
+<$set name="doc-toc-drop" filter="""[all[current]get[$(doc-id)$index]] +[removeprefix<action-index>]""" value="do-not-drop"  emptyValue="ok-to-drop">
+<!-- $action-setfield $tiddler="Debug" ct=<<currentTiddler>> />
+<$action-setfield $tiddler="Debug" at=<<actionTiddler>> />
+<$action-setfield $tiddler="Debug" ci={{{[all[current]get[$(doc-id)$index]]}}} />
+<$action-setfield $tiddler="Debug" ai=<<action-index>> / -->
+<$macrocall $name=<<doc-toc-drop>> p="""$p$"""/>
+</$set>
+</$set>
+\end
+
+\define doc-toc(root, expand:"yes", recurse:"yes", edit:"yes", rebuild:"yes")
+<ul class="fa-ul">
+<$list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$root$]sortby{$root$!!$(doc-id)$list}]""">
+<$vars i={{!!$(doc-id)$index}}>
+<$reveal type="match" text="yes" default="""$edit$""" >
+<li><$droppable actions=<<doc-toc-drop-actions """$root$""">> >
+<div class="tc-droppable-placeholder">&nbsp;</div>
+<<caret """$expand$""" """$recurse$""">> <$link to={{!!title}}><$view field="$(doc-id)$index"/> <$view field="caption">{{!!title}}</$view></$link>
+</$droppable></li>
+</$reveal>
+<$reveal type="nomatch" text="yes" default="""$edit$""" >
+<li><<caret """$expand$""" """$recurse$""">> <$link to={{!!title}}><$view field="$(doc-id)$index"/> <$view field="caption">{{!!title}}</$view></$link></li>
+</$reveal>
+</$vars>
+<<doc-toc-recurse """$expand$""" """$recurse$""" """$edit$""" "no">>
+</$list>
+<$reveal type="match" text="yes" default="""$edit$""" >
+<$tiddler tiddler="""$root$""">
+<li><$droppable actions=<<doc-toc-drop-actions """$root$""">> >
+<div class="tc-droppable-placeholder">&nbsp;</div>
+@@color:transparent;=====@@
+</$droppable></li>
+</$tiddler>
+</$reveal>
+</ul>
+<$reveal type="match" text="yes-yes" default="""$edit$-$rebuild$""" >
+<$button class="tc-btn-invisible tc-tiddlylink" actions=<<doc-rebuild-index "Doc sample">>>
+Rebuild index
+</$button>
+</$reveal>
+\end

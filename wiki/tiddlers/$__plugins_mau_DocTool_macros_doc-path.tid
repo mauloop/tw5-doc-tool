@@ -1,0 +1,28 @@
+created: 20170719131238686
+modified: 20190213173411199
+tags: DocToolPlugin $:/tags/Macro
+title: $:/plugins/mau/DocTool/macros/doc-path
+tmap.id: e5425381-02ec-4ba3-af64-df2347c51029
+type: text/vnd.tiddlywiki
+
+\define doc-path(here, parent:"", path:"")
+<$set name="parent" value={{{[[$here$]get[$(doc-id)$parent]]}}}>
+<$set name="next" filter="""[[$here$]get[$(doc-id)$parent]]""" value="doc-path-add" emptyValue="doc-path-print">
+<$macrocall $name=<<next>> here="""$here$""" parent=<<parent>> path="""$path$""" />
+</$set>
+</$set>
+\end
+
+\define doc-path-add(here, parent, path)
+<$macrocall $name="doc-path" here="""$parent$""" parent="" path="""[[$here$]] $path$"""/>
+\end
+
+\define doc-path-print(here, parent, path)
+<table class="doc-path noBorder"><tr>
+<$list filter="""[[$here$]] $path$""">
+<$set name="caret" filter="""[enlist[$here$]]""" value="""<i class="fa fa-1x fa-caret-right"/>""" emptyValue="">
+<td style="white-space:nowrap;word-break:keep-all;"><$link><<currentTiddler>> <<caret>></$link></td>
+</$set>
+</$list>
+</tr></table>
+\end

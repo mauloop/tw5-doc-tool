@@ -1,0 +1,18 @@
+created: 20171204103151234
+modified: 20190213173602915
+tags: DocToolPlugin $:/tags/ViewToolbar
+title: $:/plugins/mau/DocTool/ui/ViewToolbar/new-subtopic
+type: text/vnd.tiddlywiki
+
+<span class="tc-popup-keep">
+<$button class="tc-btn-invisible" popup=<<qualify "$:/state/popup/new-subtopic">> >
+<i class="fa fa-book" aria-hidden="true"></i>
+</$button>
+</span>
+<$reveal state=<<qualify "$:/state/popup/new-subtopic">> type="popup" position="below" animate="yes">
+<div class="tc-drop-down">
+<$list filter="[all[shadows+tiddlers]tag[$:/tags/TopicType]]" variable="topic-type">
+<$transclude tiddler=<<topic-type>> />
+</$list>
+</div>
+</$reveal>
