@@ -1,0 +1,12 @@
+created: 20190107194802565
+description: JSON for DOCX
+extension: .json
+modified: 20190213172329356
+tags: $:/tags/Exporter DocToolPlugin
+title: $:/plugins/mau/DocTool/exporters/json4docx
+type: text/vnd.tiddlywiki
+
+\define renderContent()
+{{{ $(exportFilter)$ ||$:/core/templates/plain-text-tiddler}}}
+\end
+<<renderContent>>
