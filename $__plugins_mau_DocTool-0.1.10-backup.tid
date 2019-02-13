@@ -5,6 +5,7 @@ dependents: FontAwesome CustomTemplates
 description: DocToolPlugin
 modified: 20190213174716658
 plugin-type: plugin
+revision: 1
 source: https://github.com/mauloop/tw5-doc-tool
 title: $:/plugins/mau/DocTool
 type: application/json
