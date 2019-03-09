@@ -1,5 +1,5 @@
 created: 20171204174122793
-modified: 20190213173419920
+modified: 20190309200249854
 tags: $:/tags/Macro DocToolPlugin
 title: $:/plugins/mau/DocTool/macros/doc-toc
 tmap.id: 90e1c8fb-5069-4800-9497-87c9c2371c51
@@ -101,7 +101,7 @@ ti: topic index (x.y. ... .i)
 </$reveal>
 </ul>
 <$reveal type="match" text="yes-yes" default="""$edit$-$rebuild$""" >
-<$button class="tc-btn-invisible tc-tiddlylink" actions=<<doc-rebuild-index "Doc sample">>>
+<$button class="tc-btn-invisible tc-tiddlylink" actions=<<doc-rebuild-index """$root$""">>>
 Rebuild index
 </$button>
 </$reveal>
