@@ -1,10 +1,10 @@
 created: 20171025111006946
-modified: 20190503143128052
+modified: 20190503235117087
 tags: DocToolPlugin $:/tags/BelowStory
 title: $:/plugins/mau/DocTool/ui/BelowStory
 type: text/vnd.tiddlywiki
 
-\define sort-by-parent() """[[$(parent)$]listed[$(doc-id)$parent]sortby{$(parent)$!!$(doc-id)$list}]"""
+\define sort-by-parent() """[all[shadows+tiddlers]kin:$(doc-id)$parent:to:1[$(parent)$]![$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]"""
 
 <!-- \define sort-by-parent() """[has[$(doc-id)$parent]$(doc-id)$parent[$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]""" -->
 
