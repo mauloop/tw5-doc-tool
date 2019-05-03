@@ -1,0 +1,12 @@
+created: 20171208105906609
+modified: 20190503155458870
+tags: DocToolPlugin $:/tags/TopicType
+title: $:/plugins/mau/DocTool/ui/buttons/generic-subtopic
+type: text/vnd.tiddlywiki
+
+\define parent() [[$(currentTiddler)$]]
+
+<$button class="tc-btn-invisible">
+Generic subtopic
+<$action-sendmessage $message="tm-new-tiddler" parent=<<parent>> />
+</$button>
