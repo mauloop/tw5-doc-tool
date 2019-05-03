@@ -1,10 +1,21 @@
 created: 20170719131238686
-modified: 20190213173411199
+modified: 20190503151409627
 tags: DocToolPlugin $:/tags/Macro
 title: $:/plugins/mau/DocTool/macros/doc-path
 tmap.id: e5425381-02ec-4ba3-af64-df2347c51029
 type: text/vnd.tiddlywiki
 
+\define doc-path(here)
+<table class="doc-path noBorder"><tr>
+<$list filter="""[kin:$(doc-id)$parent:from[$here$]sort[$(doc-id)$index]]""">
+<$set name="caret" filter="""[enlist[$here$]]""" value="""<i class="fa fa-1x fa-caret-right"/>""" emptyValue="">
+<td style="white-space:nowrap;word-break:keep-all;"><$link><<currentTiddler>> <<caret>></$link></td>
+</$set>
+</$list>
+</tr></table>
+\end
+
+<!-- 
 \define doc-path(here, parent:"", path:"")
 <$set name="parent" value={{{[[$here$]get[$(doc-id)$parent]]}}}>
 <$set name="next" filter="""[[$here$]get[$(doc-id)$parent]]""" value="doc-path-add" emptyValue="doc-path-print">
@@ -26,3 +37,4 @@ type: text/vnd.tiddlywiki
 </$list>
 </tr></table>
 \end
+-->

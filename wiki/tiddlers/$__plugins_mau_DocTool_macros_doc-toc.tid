@@ -1,5 +1,5 @@
 created: 20171204174122793
-modified: 20190309200249854
+modified: 20190503161412720
 tags: $:/tags/Macro DocToolPlugin
 title: $:/plugins/mau/DocTool/macros/doc-toc
 tmap.id: 90e1c8fb-5069-4800-9497-87c9c2371c51
@@ -26,11 +26,13 @@ ti: topic index (x.y. ... .i)
 <$macrocall $name=<<write-index>> t="""$t$""" ti=<<ti>> />
 </$set>
 
-<$list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]""" variable="list-item">
+<!-- $list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]""" variable="list-item" -->
+<$list filter="""[[$p$]listed[$(doc-id)$parent]sortby{$p$!!$(doc-id)$list}allafter[$t$]first[]]""" variable="list-item">
 <$macrocall $name="doc-rebuild-index" t=<<list-item>> i=<<incr """$i$""">> p="""$p$""" pi="""$pi$"""/>
 </$list>
 
-<$list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$t$]sortby{$t$!!$(doc-id)$list}first[]]""" variable="list-item">
+<!-- $list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$t$]sortby{$t$!!$(doc-id)$list}first[]]""" variable="list-item" -->
+<$list filter="""[[$t$]listed[$(doc-id)$parent]sortby{$t$!!$(doc-id)$list}first[]]""" variable="list-item">
 <$macrocall $name="doc-rebuild-index" t=<<list-item>> i="1" p="""$t$""" pi=<<ti>>/>
 </$list>
 
@@ -59,25 +61,34 @@ ti: topic index (x.y. ... .i)
 
 
 \define ok-to-drop(p)
-<$action-listops $tiddler="""$p$""" $field="$(doc-id)$list" $filter="""[$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]"""/>
-<$action-setfield $tiddler=<<actionTiddler>> $(doc-id)$parent="""$p$"""/>
+<!-- $action-listops $tiddler="""$p$""" $field="$(doc-id)$list" $filter="""[$(doc-id)$parent[$p$]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]"""/ -->
+<$action-listops $tiddler="""$p$""" $field="$(doc-id)$list" $filter="""[[$p$]listed[$(doc-id)$parent]sortby{$p$!!$(doc-id)$list}] +[insertbefore:currentTiddler<actionTiddler>]"""/>
+<!-- $action-setfield $tiddler=<<actionTiddler>> $(doc-id)$parent="""$p$"""/ -->
+<$action-listops $tiddler=<<actionTiddler>> $field="""$(doc-id)$parent""" $filter="""[[$p$]]"""/>
 \end
 
 \define doc-toc-drop-actions(p)
-<$set name="action-index" value={{{[<actionTiddler>get[$(doc-id)$index]]}}}>
-<$set name="doc-toc-drop" filter="""[all[current]get[$(doc-id)$index]] +[removeprefix<action-index>]""" value="do-not-drop"  emptyValue="ok-to-drop">
+<!-- $set name="action-index" value={{{[<actionTiddler>get[$(doc-id)$index]]}}}>
+<$set name="doc-toc-drop" filter="""[all[current]get[$(doc-id)$index]] +[removeprefix<action-index>]""" value="do-not-drop"  emptyValue="ok-to-drop" -->
+<$set name="doc-toc-drop" filter="""[all[shadows+tiddlers]kin:$(doc-id)$parent:to<actionTiddler>is[current]]""" value="do-not-drop"  emptyValue="ok-to-drop">
+<!-- DEBUG -->
 <!-- $action-setfield $tiddler="Debug" ct=<<currentTiddler>> />
 <$action-setfield $tiddler="Debug" at=<<actionTiddler>> />
-<$action-setfield $tiddler="Debug" ci={{{[all[current]get[$(doc-id)$index]]}}} />
+<$action-setfield $tiddler="Debug" filter1={{{[all[shadows+tiddlers]kin:$(doc-id)$parent:to<actionTiddler>is[current]]}}} />
+<$action-listops $tiddler="Debug" $field="filter2" $filter="""[all[shadows+tiddlers]kin:$(doc-id)$parent:to<actionTiddler>]""" / -->
+<!-- $action-setfield $tiddler="Debug" ci={{{[all[current]get[$(doc-id)$index]]}}} />
 <$action-setfield $tiddler="Debug" ai=<<action-index>> / -->
+<!-- DEBUG END -->
 <$macrocall $name=<<doc-toc-drop>> p="""$p$"""/>
 </$set>
-</$set>
+<!-- /$set>
+</$set -->
 \end
 
 \define doc-toc(root, expand:"yes", recurse:"yes", edit:"yes", rebuild:"yes")
 <ul class="fa-ul">
-<$list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$root$]sortby{$root$!!$(doc-id)$list}]""">
+<!-- $list filter="""[has[$(doc-id)$parent]$(doc-id)$parent[$root$]sortby{$root$!!$(doc-id)$list}]""" -->
+<$list filter="""[[$root$]listed[$(doc-id)$parent]sortby{$root$!!$(doc-id)$list}]""">
 <$vars i={{!!$(doc-id)$index}}>
 <$reveal type="match" text="yes" default="""$edit$""" >
 <li><$droppable actions=<<doc-toc-drop-actions """$root$""">> >

@@ -1,10 +1,12 @@
 created: 20171025111006946
-modified: 20190213173527388
+modified: 20190503143128052
 tags: DocToolPlugin $:/tags/BelowStory
 title: $:/plugins/mau/DocTool/ui/BelowStory
 type: text/vnd.tiddlywiki
 
-\define sort-by-parent() """[has[$(doc-id)$parent]$(doc-id)$parent[$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]"""
+\define sort-by-parent() """[[$(parent)$]listed[$(doc-id)$parent]sortby{$(parent)$!!$(doc-id)$list}]"""
+
+<!-- \define sort-by-parent() """[has[$(doc-id)$parent]$(doc-id)$parent[$(parent)$]sortby{$(parent)$!!$(doc-id)$list}]""" -->
 
 <div class="below-story">
 <$set name="doc-id" value={{$:/plugins/mau/DocTool/config/doc-id}}>
