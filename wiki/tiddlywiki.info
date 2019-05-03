@@ -3,11 +3,10 @@
     "plugins": [
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
-        "tiddlywiki/highlight",
-        "tiddlywiki/codemirror",
         "felixhayashi/topstoryview",
         "TheDiveO/FontAwesome",
-        "ahahn/tinka"
+        "ahahn/tinka",
+        "bimlas/kin-filter"
     ],
     "themes": [
         "tiddlywiki/vanilla",
