@@ -5,6 +5,7 @@ dependents: FontAwesome CustomTemplates kin-filter
 description: DocToolPlugin
 modified: 20190504104642092
 plugin-type: plugin
+revision: 0
 source: https://github.com/mauloop/tw5-doc-tool
 title: $:/plugins/mau/DocTool
 type: application/json
