@@ -1,14 +1,14 @@
 created: 20171208101341804
 index: 
 list: [[Lorem ipsum]] [[Nullam dignissim]] [[Donec volutpat]] [[Maecenas mauris]]
-modified: 20190503223936320
+modified: 20190504102310244
 tags: 
 title: Home
 type: text/vnd.tiddlywiki
 
 Goal for this wiki:
 
-* provide tools that provide hierarchical views of tiddlers content, suitable to produce documentation
+* build tools that provide hierarchical views of tiddlers content, suitable to produce documentation
 * help to write documents providing "ad-hoc" customizable templates for specific parts of the document
 * provide tools that exports tiddler content formatted to be converted/imported to Word
 
