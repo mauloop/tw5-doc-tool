@@ -1,5 +1,5 @@
 created: 20171025111006946
-modified: 20190503235117087
+modified: 20190505104032524
 tags: DocToolPlugin $:/tags/BelowStory
 title: $:/plugins/mau/DocTool/ui/BelowStory
 type: text/vnd.tiddlywiki
@@ -10,10 +10,12 @@ type: text/vnd.tiddlywiki
 
 <div class="below-story">
 <$set name="doc-id" value={{$:/plugins/mau/DocTool/config/doc-id}}>
-<$set name="parent" filter=<<story-filter>> >
+<$set name="parent" filter=<<story-filter>> emptyValue={{{[{$:/plugins/mau/DocTool/config/doc-root}]}}}>
 <$wikify name="parent-list" text=<<sort-by-parent>> >
 <$list filter=<<parent-list>> template="$:/plugins/mau/DocTool/ui/BelowStory/ViewTemplate" />
 </$wikify>
 </$set>
 </$set>
 </div>
+
+
