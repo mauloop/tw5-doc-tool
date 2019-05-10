@@ -1,0 +1,38 @@
+created: 20190506184719042
+modified: 20190510102326883
+tags: DocToolPlugin $:/tags/Macro
+title: $:/plugins/mau/DocTool/macros/doc-edit
+type: text/vnd.tiddlywiki
+
+\define doc-edit(tiddler, target-type, target-name, default, class, placeholder, focusPopup, focus, autoHeight:"yes", minHeight, rows, label)
+''$label$:''
+<$set name="q" value=<<qualify """$:/temp/doc-edit-$target-name$""">> >
+<$reveal type="nomatch" text="show" state=<<q>> default="hide">
+[<$button set=<<q>> setTo="show" class="tc-btn-invisible tc-tiddlylink">Show editor toolbar</$button>]
+</$reveal>
+<$reveal type="match" text="show" state=<<q>> default="hide">
+[<$button set=<<q>> setTo="hide" class="tc-btn-invisible tc-tiddlylink">Hide editor toolbar</$button>]
+</$reveal>
+<$set name="tid" filter="""[enlist[$tiddler$]]""" value="""$tiddler$""" emptyValue="""$(currentTiddler)$"""> 
+<$edit-text
+    tiddler=<<tid>>
+    $target-type$="""$target-name$"""
+    tag="textarea"
+    default="""$default$""" 
+    class="""$class$"""
+    placeholder="""$placeholder$"""
+    focusPopup="""$focusPopup$"""
+    focus="""$focus$"""
+    autoHeight="""$autoHeight$"""
+    minHeight="""$minHeight$"""
+    rows="""$rows$"""
+>
+<$reveal type="match" text="show" state=<<q>> default="hide">
+<$list filter="[all[shadows+tiddlers]tag[$:/tags/EditorToolbar]!has[draft.of]!prefix[$:/core/ui/EditorToolbar/preview]]">
+<$transclude tiddler="$:/core/ui/EditTemplate/body/toolbar/button" mode="inline"/>
+</$list>
+</$reveal>
+</$edit-text>
+</$set>
+</$set>
+\end
